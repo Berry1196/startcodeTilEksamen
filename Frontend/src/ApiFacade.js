@@ -29,6 +29,10 @@ function apiFacade() {
     const options = makeOptions("POST", true, car);
     return fetch(URL + "/api/cars", options);
   }
+  function createJoke(joke) {
+    const options = makeOptions("POST", true, joke);
+    return fetch(URL + "/api/cars/jokes", options);
+  }
 
   // fetch data and catch possible errors
   async function fetchAdminData() {
@@ -100,6 +104,7 @@ function apiFacade() {
     fetchData,
     createNewCar,
     deleteCar,
+    createJoke,
   };
 }
 const facade = apiFacade();

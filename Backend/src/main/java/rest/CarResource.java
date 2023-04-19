@@ -12,6 +12,11 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Path("cars")
 public class CarResource {
@@ -49,5 +54,46 @@ public class CarResource {
         Long idLong = Long.valueOf(id);
         FACADE.deleteCar(idLong);
     }
+
+    @GET
+    @Path("jokes")
+    @Produces("application/json")
+    public String getJokes() {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.chucknorris.io/jokes/random"))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return response.body();
+    }
+//    @POST
+//    @Path("jokes")
+//    @Produces("application/json")
+//    @Consumes("application/json")
+//    public String createJoke(String jokes) {
+//        String joke;
+//        String result;
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(URI.create("https://api.chucknorris.io/jokes/random"))
+//                .method("GET", HttpRequest.BodyPublishers.noBody())
+//                .build();
+//        HttpResponse<String> response = null;
+//        try{
+//            JsonObject json = JsonParser.parseString(jokes).getAsJsonObject();
+//            joke = json.get("joke").getAsString();
+//            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+//            result = response.body();
+//        } catch (Exception e) {
+//            return "{\"error\":\"Invalid JSON\"}";
+//        }
+//
+//        return GSON.toJson(result);
+//
+//    }
 
 }
